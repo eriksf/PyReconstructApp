@@ -3,8 +3,6 @@ Description:
 
 This application will allow a user to submit a job on the [Texas Advanced Computing Center (TACC)](https://www.tacc.utexas.edu/) [Lonestar6 supercomputer](https://www.tacc.utexas.edu/systems/lonestar6) to utilize [PyReconstruct](https://github.com/SynapseWeb/pyReconstruct#pyreconstruct); the Python functionality of the 3D image reconstruction software [RECONSTRUCT](https://synapseweb.clm.utexas.edu/software-0).
 
-This application will allow a user to submit a job on the [Texas Advanced Computing Center (TACC)](https://www.tacc.utexas.edu/) [Lonestar6 supercomputer](https://www.tacc.utexas.edu/systems/lonestar6) to visualize and analyze molecular structures utilizing the [University of California San Francisco (UCSF)](https://www.ucsf.edu/) [ChimeraX](https://www.cgl.ucsf.edu/chimerax/) program.
-
 Running the Application:
 -----------------------
 To run the application, the user must submit a job using the [3D Electron Microscopy (3Dem)](https://3dem.org/). A virtual DCV session will be initialized for the user, and a document titled 'PyReconstruct_dcvserver.txt' will be created in the user's work folder with connection instructions. Once connected, the PyReconstruct software will begin running, and a Tapis jobs archive folder will be created on the desktop for the user's convenience.
