@@ -112,9 +112,9 @@ echo "TACC: To connect to your DCV session, please point a modern web browser to
 echo "TACC:          https://ls6.tacc.utexas.edu:$LOGIN_PORT"
 
 
-echo "TACC: Your DCV session is now running!" > $STOCKYARD/ChimeraX_dcvserver.txt
-echo "TACC: To connect to your DCV session, please point a modern web browser to:" >> $STOCKYARD/ChimeraX_dcvserver.txt
-echo "TACC:          https://ls6.tacc.utexas.edu:$LOGIN_PORT" >> $STOCKYARD/ChimeraX_dcvserver.txt
+echo "TACC: Your DCV session is now running!" > $STOCKYARD/PyReconstruct_dcvserver.txt
+echo "TACC: To connect to your DCV session, please point a modern web browser to:" >> $STOCKYARD/PyReconstruct_dcvserver.txt
+echo "TACC:          https://ls6.tacc.utexas.edu:$LOGIN_PORT" >> $STOCKYARD/PyReconstruct_dcvserver.txt
 
 # Make a symlink to work in home dir to help with navigation
 if [ ! -L $HOME/Desktop/Jobs ];
@@ -154,4 +154,4 @@ sleep 1
 find /tmp/.X11-unix -user $USER -exec rm -f '{}' \;
 
 echo "TACC: job $SLURM_JOB_ID execution finished at: `date`"
-rm $STOCKYARD/ChimeraX_dcvserver.txt
+rm $STOCKYARD/PyReconstruct_dcvserver.txt
