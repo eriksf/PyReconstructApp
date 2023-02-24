@@ -53,6 +53,7 @@ fi
 XSTARTUP="/tmp/dcv-startup-$USER"
 cat <<- EOF > $XSTARTUP
 #!/bin/sh
+
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
 . /etc/X11/xinit/xinitrc-common
@@ -117,6 +118,13 @@ echo "TACC: To connect to your DCV session, please point a modern web browser to
 echo "TACC:          https://ls6.tacc.utexas.edu:$LOGIN_PORT" >> $STOCKYARD/PyReconstruct_dcvserver.txt
 
 # Make a symlink to work in home dir to help with navigation
+if [ ! -L $HOME/work ];
+then
+    ln -s $STOCKYARD $HOME/work
+fi
+
+# Make a desktop folder with jobs archive
+
 if [ ! -L $HOME/Desktop/Jobs ];
 then
     ln -s $STOCKYARD/archive/ $HOME/Desktop/Jobs
@@ -125,14 +133,17 @@ fi
 # silence xalt errors
 module unload xalt
 
+
+
+
 # run an xterm for the user; execution will hold here
 mkdir -p $HOME/.tap
 TAP_LOCKFILE=${HOME}/.tap/${SLURM_JOB_ID}.lock
 sleep 1
 DISPLAY=:0 xterm -fg white -bg red3 +sb -geometry 55x2+0+0 -T 'END SESSION HERE' -e "echo 'TACC: Press <enter> in this window to end your session' && read && rm ${TAP_LOCKFILE}" &
 sleep 1
-
-DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://maduprey/chimerax:1.5 chimerax' &
+DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://${CONTAINER_IMAGE} python src/PyReconstruct.py' &
+#DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'python3 PyReconstruct.py' &
 
 
 echo $(date) > ${TAP_LOCKFILE}

@@ -6,7 +6,7 @@
   "deploymentPath": "{{ username }}/apps/{{ app.name }}-{{ app.version }}",
   "deploymentSystem": "tacc.work.tiffhuff",
   "helpURI": "https://github.com/SynapseWeb/PyReconstruct#the-main-window",
-  "label": "PyReconstruct GUI",
+  "label": "PyReconstruct Dev",
   "shortDescription": "{{ app.description }}",
   "longDescription": "This application will allow a user to submit a job on the TACC Lonestar6 supercomputer to use the SynapseWeb PyReconstruct 3D image reconstruction software. Once the job is running, click on Data Files => My Data (Work) and look for the file titled 'PyReconstruct_dcvserver.txt' for connection instructions. After connecting, the PyReconstruct software will begin running, and a Tapis jobs archive folder will be created on the desktop for the user's convenience.",                  
   "modules": [
@@ -18,7 +18,7 @@
   "templatePath": "runner.sh",
   "testPath": "tester.sh",
   "version": "{{ app.version }}",
-  "defaultMaxRunTime": "00:30:00",
+  "defaultMaxRunTime": "02:00:00",
   "inputs": [],
 "parameters": [
     {
