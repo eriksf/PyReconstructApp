@@ -18,22 +18,6 @@ fi
 NODE_HOSTNAME=`hostname -s`
 echo "TACC: running on node $NODE_HOSTNAME"
 
-#CONDA=$(which conda 2> /dev/null)
-#if [ ! -z "${CONDA}" ]; then
-#    CONDA_ENV=$(conda info | grep active | cut -d ":" -f 2)
-#    if [[ ! "${CONDA_ENV}" =~ "None" ]]; then
-#        echo "TACC:"
-#        echo "TACC: ERROR - active conda installation detected, which will break DCV"
-#        echo "TACC: ERROR - deactivate conda with 'conda deactivate'"
-#        echo "TACC: ERROR - then resubmit this job script"
-#        echo "TACC: ERROR - Questions? Please submit a consulting ticket"
-#        echo "TACC: ERROR - https://portal.tacc.utexas.edu/tacc-consulting/-/consult/tickets/create"
-#        echo "TACC:"
-#        echo "TACC: job ${SLURM_JOB_ID} execution finished at: $(date)"
-#        exit 1
-#    fi
-#fi
-
 # confirm DCV server is alive
 DCV_SERVER_UP=`systemctl is-active dcvserver`
 if [ $DCV_SERVER_UP != "active" ]; then
@@ -133,7 +117,7 @@ fi
 # silence xalt errors
 module unload xalt
 
-# Installing and updating PyReconstruct
+# Updating PyReconstruct and installing dependencies
 
 echo "Checking if PyReconstruct exists in $WORK..."
 if [ ! -d "$WORK/PyReconstruct" ]; then
@@ -153,19 +137,12 @@ echo "Installing PyReconstruct dependencies..."
 pip install -r src/requirements.txt
 
 
-
-
-
-
-
 # run an xterm for the user; execution will hold here
 mkdir -p $HOME/.tap
 TAP_LOCKFILE=${HOME}/.tap/${SLURM_JOB_ID}.lock
 sleep 1
 DISPLAY=:0 xterm -fg white -bg red3 +sb -geometry 55x2+0+0 -T 'END SESSION HERE' -e "echo 'TACC: Press <enter> in this window to end your session' && read && rm ${TAP_LOCKFILE}" &
 sleep 1
-#DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://${CONTAINER_IMAGE} python src/PyReconstruct.py' &
-#DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'python3 PyReconstruct.py' &
 DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://tiffhuff/pyreconstruct:0.0.1 python src/PyReconstruct.py' &
 sleep 30
 DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'cd PyReonstruct' &
