@@ -133,6 +133,28 @@ fi
 # silence xalt errors
 module unload xalt
 
+# Installing and updating PyReconstruct
+
+echo "Checking if PyReconstruct exists in $WORK..."
+if [ ! -d "$WORK/PyReconstruct" ]; then
+  echo "PyReconstruct not found in $WORK..."
+  git clone https://github.com/SynapseWeb/pyReconstruct $WORK/PyReconstruct
+fi
+
+echo "Changing directory to pyReconstruct..."
+cd $WORK/PyReconstruct
+
+echo "Fetching updated version of repository..."
+git fetch
+git pull
+# git fetch --all && git reset --hard origin/main
+
+echo "Installing PyReconstruct dependencies..."
+pip install -r src/requirements.txt
+
+
+
+
 
 
 
@@ -142,9 +164,14 @@ TAP_LOCKFILE=${HOME}/.tap/${SLURM_JOB_ID}.lock
 sleep 1
 DISPLAY=:0 xterm -fg white -bg red3 +sb -geometry 55x2+0+0 -T 'END SESSION HERE' -e "echo 'TACC: Press <enter> in this window to end your session' && read && rm ${TAP_LOCKFILE}" &
 sleep 1
-DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://${CONTAINER_IMAGE} python src/PyReconstruct.py' &
+#DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://${CONTAINER_IMAGE} python src/PyReconstruct.py' &
 #DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'python3 PyReconstruct.py' &
-
+DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://tiffhuff/pyreconstruct:0.0.1 python src/PyReconstruct.py' &
+sleep 30
+DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'cd PyReonstruct' &
+sleep 1
+DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'python src/PyReconstruct.py' &
+sleep 1
 
 echo $(date) > ${TAP_LOCKFILE}
 while [ -f ${TAP_LOCKFILE} ]; do
