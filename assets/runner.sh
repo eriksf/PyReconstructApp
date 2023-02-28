@@ -163,9 +163,10 @@ echo "Changing directory to pyReconstruct..."
 cd $WORK/PyReconstruct
 
 echo "Fetching updated version of repository..."
-git fetch
+#git fetch
+#git pull
+git fetch --all && git reset --hard origin/main
 git pull
-# git fetch --all && git reset --hard origin/main
 
 echo "Installing PyReconstruct dependencies..."
 pip install -r src/requirements.txt
