@@ -8,7 +8,7 @@
   "helpURI": "https://github.com/SynapseWeb/PyReconstruct#the-main-window",
   "label": "PyReconstruct Dev",
   "shortDescription": "{{ app.description }}",
-  "longDescription": "This application will allow a user to submit a job on the TACC Lonestar6 supercomputer to use the SynapseWeb PyReconstruct 3D image reconstruction software. Once the job is running, click on Data Files => My Data (Work) and look for the file titled 'PyReconstruct_dcvserver.txt' for connection instructions. After connecting, the PyReconstruct software will begin running, and a Tapis jobs archive folder will be created on the desktop for the user's convenience.",                  
+  "longDescription": "This application will allow a user to submit a job on the TACC Lonestar6 supercomputer to use the SynapseWeb PyReconstruct 3D image reconstruction software. Once the job is running, click on History => Open Session to join the virtual session. Additional connection instructions can be found by clicking on Data Files => My Data (Work) and selecting the file titled 'PyReconstruct_dcvserver.txt'. After connecting, the PyReconstruct software will begin running, and a Tapis jobs archive folder will be created on the desktop for the user's convenience.", 
   "modules": [
     "load tacc-apptainer"
   ],
@@ -59,7 +59,33 @@
             "repeatArgument": false
         },
         "semantics": {}
-    }
+    },
+    {
+      "id": "_webhook_base_url",
+      "semantics": {
+          "minCardinality": 1,
+          "ontology": [
+              "xs:string"
+          ],
+          "maxCardinality": 1
+      },
+      "value": {
+          "required": true,
+          "enquote": false,
+          "default": null,
+          "visible": true,
+          "validator": null,
+          "type": "string",
+          "order": 1
+      },
+      "details": {
+          "argument": null,
+          "repeatArgument": false,
+          "description": null,
+          "showArgument": false,
+          "label": "Base portal webhook url."
+      }
+  }
   ],
   "outputs": []
 }

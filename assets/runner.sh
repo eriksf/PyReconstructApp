@@ -1,6 +1,21 @@
 
 echo "TACC: job $SLURM_JOB_ID execution at: `date`"
 
+# program and command line arguments run within xterm -e command
+XTERM_CMD="${_XTERM_CMD}"
+# Webhook callback url for job ready notification.
+# Notifications are sent to INTERACTIVE_WEBHOOK_URL i.e. https://3dem.org/webhooks/interactive/
+INTERACTIVE_WEBHOOK_URL="${_webhook_base_url}interactive/"
+
+
+# our node name
+NODE_HOSTNAME=`hostname -s`
+
+# HPC system target. Used as DCV host
+HPC_HOST=`hostname -d`
+
+echo "TACC: running on node $NODE_HOSTNAME on $HPC_HOST"
+
 TAP_FUNCTIONS="/share/doc/slurm/tap_functions"
 if [ -f ${TAP_FUNCTIONS} ]; then
     . ${TAP_FUNCTIONS}
@@ -14,11 +29,9 @@ else
     exit 1
 fi
 
-# our node name
-NODE_HOSTNAME=`hostname -s`
-echo "TACC: running on node $NODE_HOSTNAME"
-
 # confirm DCV server is alive
+SERVER_TYPE="DCV"
+
 DCV_SERVER_UP=`systemctl is-active dcvserver`
 if [ $DCV_SERVER_UP != "active" ]; then
     echo "TACC:"
@@ -78,7 +91,6 @@ if ! `dcv list-sessions | grep -q $USER`; then
     exit 1
 fi
 
-
 LOCAL_VNC_PORT=8443  # default DCV port
 echo "TACC: local (compute node) DCV port is $LOCAL_VNC_PORT"
 
@@ -100,6 +112,28 @@ echo "TACC:          https://ls6.tacc.utexas.edu:$LOGIN_PORT"
 echo "TACC: Your DCV session is now running!" > $STOCKYARD/PyReconstruct_dcvserver.txt
 echo "TACC: To connect to your DCV session, please point a modern web browser to:" >> $STOCKYARD/PyReconstruct_dcvserver.txt
 echo "TACC:          https://ls6.tacc.utexas.edu:$LOGIN_PORT" >> $STOCKYARD/PyReconstruct_dcvserver.txt
+
+#Initiating Webhooks
+
+echo "TACC:          https://$HPC_HOST:$LOGIN_PORT"
+
+if [ "x${SERVER_TYPE}" == "xDCV" ]; then
+  curl -k --data "event_type=WEB&address=https://$HPC_HOST:$LOGIN_PORT&owner=${AGAVE_JOB_OWNER}&job_uuid=${AGAVE_JOB_ID}" $INTERACTIVE_WEBHOOK_URL &
+  echo "event_type=WEB&address=https://$HPC_HOST:$LOGIN_PORT&owner=${AGAVE_JOB_OWNER}&job_uuid=${AGAVE_JOB_ID}" $INTERACTIVE_WEBHOOK_URL
+else
+  # we should never get this message since we just checked this at LOCAL_PORT
+  echo "TACC: "
+  echo "TACC: ERROR - unknown server type '${SERVER_TYPE}'"
+  echo "TACC: Please submit a consulting ticket at the TACC user portal"
+  echo "TACC: https://portal.tacc.utexas.edu/tacc-consulting/-/consult/tickets/create"
+  echo "TACC:"
+  echo "TACC: job $SLURM_JOB_ID execution finished at: `date`"
+  exit 1
+fi
+
+if [ -d "$workingDirectory" ]; then
+  cd ${workingDirectory}
+fi
 
 # Make a symlink to work in home dir to help with navigation
 if [ ! -L $HOME/work ];
