@@ -5,7 +5,7 @@ This application will allow a user to submit a job on the [Texas Advanced Comput
 
 Running the Application:
 -----------------------
-To run the application, the user must submit a job using the [3D Electron Microscopy (3Dem)](https://3dem.org/) web-based research platform. A virtual DCV session will be initialized for the user, and a document titled 'PyReconstruct_dcvserver.txt' will be created in the user's work folder with connection instructions. Once connected, the PyReconstruct software will begin running, and a Tapis jobs archive folder will be created on the desktop for the user's convenience.
+To run the application, the user must submit a job using the [3D Electron Microscopy (3Dem)](https://3dem.org/) web-based research platform. Once running, a virtual DCV session will be initialized for the user, and a button on the History/Jobs page will appear allowing the user to open the session. Additionally, a document titled 'PyReconstruct_dcvserver.txt' will be created in the user's work folder with connection instructions. Once connected, the PyReconstruct software will begin running, and a Tapis jobs archive folder will appear on the desktop for the user's convenience.
 
 For instructions on using PyReconstruct, please see the [documentation](https://github.com/SynapseWeb/pyReconstruct#the-main-window).
 
