@@ -1,7 +1,7 @@
 {
   "checkpointable": false,
   "name": "{{ app.name }}",
-  "executionSystem": "tacc.ls6.tiffhuff",
+  "executionSystem": "3dem.community.exec.ls6",
   "executionType": "HPC",
   "deploymentPath": "corral-repl/projects/NeuroNex-3DEM/applications",
   "deploymentSystem": "3dem.storage.default",

@@ -163,8 +163,6 @@ echo "Changing directory to pyReconstruct..."
 cd $WORK/PyReconstruct
 
 echo "Fetching updated version of repository..."
-#git fetch
-#git pull
 git fetch --all && git reset --hard origin/main
 git pull
 
