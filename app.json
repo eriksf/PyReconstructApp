@@ -1,10 +1,10 @@
 {
   "checkpointable": false,
   "name": "{{ app.name }}",
-  "executionSystem": "3dem.community.exec.ls6",
+  "executionSystem": "tacc.ls6.tiffhuff",
   "executionType": "HPC",
-  "deploymentPath": "corral-repl/projects/NeuroNex-3DEM/applications",
-  "deploymentSystem": "3dem.storage.default",
+  "deploymentPath": "{{ username }}/apps/{{ app.name }}-{{ app.version }}",
+  "deploymentSystem": "tacc.work.tiffhuff",
   "helpURI": "https://github.com/SynapseWeb/PyReconstruct#the-main-window",
   "label": "PyReconstruct Dev",
   "shortDescription": "{{ app.description }}",

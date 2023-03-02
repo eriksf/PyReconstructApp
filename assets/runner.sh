@@ -178,8 +178,6 @@ DISPLAY=:0 xterm -fg white -bg red3 +sb -geometry 55x2+0+0 -T 'END SESSION HERE'
 sleep 1
 DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://tiffhuff/pyreconstruct:0.0.1 python src/PyReconstruct.py' &
 sleep 30
-DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'cd PyReonstruct' &
-sleep 1
 DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'python src/PyReconstruct.py' &
 sleep 1
 
