@@ -17,20 +17,18 @@ RUN apt-get update && apt-get upgrade -y \
     && pip install --upgrade pip \
     && pip install -r src/requirements.txt
 
-RUN apt-get update && apt-get install libgl1 -y 
-RUN apt-get install -y libxkbcommon-x11-0 
-RUN apt-get install libegl1-mesa libegl1 -y 
-RUN apt-get install libdbus-1-3 -y 
-RUN apt-get install -y libxcb-xinerama0 
-RUN apt-get install -y libxcb-xv0
-RUN apt-get install -y libxcb-util1 
-RUN apt-get install -y libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev libxcb-shape0-dev libxcb-xkb-dev 
-RUN apt-get install -y libxcb-icccm4 
-RUN apt-get install -y libxcb-image0 
-RUN apt-get install -y libxcb-keysyms1 
-RUN apt-get install -y libxcb-render-util0 
-RUN apt-get install -y libxcb-shape0 
-RUN apt-get install '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev -y 
-RUN apt-get install python3-pyqt5 -y
-
-#ENV PATH=/home1/09252/tiffhuff/.local/lib/python3.9/site-packages:$PATH
+RUN apt-get update && apt-get install libgl1 -y \
+    && apt-get install -y libxkbcommon-x11-0 \
+    && apt-get install libegl1-mesa libegl1 -y \
+    && apt-get install libdbus-1-3 -y \
+    && apt-get install -y libxcb-xinerama0 \
+    && apt-get install -y libxcb-xv0 \
+    && apt-get install -y libxcb-util1 \
+    && apt-get install -y libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev libxcb-shape0-dev libxcb-xkb-dev \
+    && apt-get install -y libxcb-icccm4 \
+    && apt-get install -y libxcb-image0 \
+    && apt-get install -y libxcb-keysyms1 \
+    && apt-get install -y libxcb-render-util0 \
+    && apt-get install -y libxcb-shape0 \
+    && apt-get install '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev -y \
+    && apt-get install python3-pyqt5 -y
