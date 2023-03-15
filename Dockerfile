@@ -1,34 +1,27 @@
 FROM python:3.9.16-bullseye
 
-RUN apt-get update && apt-get install -y curl && \
-    curl -o /tmp/miniconda.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    bash /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc
+WORKDIR /app
 
-ENV PATH /opt/conda/bin:$PATH
+# Install system dependencies
+RUN apt-get update && apt-get install -y git libxcb-xinerama0 libxcb-xinerama0-dev libxkbcommon-x11-0 xvfb
 
-RUN conda install -c anaconda libxcb -y
+# Set timezone to UTC
+ENV TZ=UTC
 
-RUN apt-get update && apt-get upgrade -y \
-    && git clone https://github.com/SynapseWeb/pyReconstruct $WORK/pyReconstruct \
-    && cd $WORK/pyReconstruct \
-    && pip install --upgrade pip \
-    && pip install -r src/requirements.txt
+# Clone the pyReconstruct repository
+RUN git clone https://github.com/SynapseWeb/pyReconstruct.git
 
-RUN apt-get update && apt-get install libgl1 -y \
-    && apt-get install -y libxkbcommon-x11-0 \
-    && apt-get install libegl1-mesa libegl1 -y \
-    && apt-get install libdbus-1-3 -y \
-    && apt-get install -y libxcb-xinerama0 \
-    && apt-get install -y libxcb-xv0 \
-    && apt-get install -y libxcb-util1 \
-    && apt-get install -y libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev libxcb-shape0-dev libxcb-xkb-dev \
-    && apt-get install -y libxcb-icccm4 \
-    && apt-get install -y libxcb-image0 \
-    && apt-get install -y libxcb-keysyms1 \
-    && apt-get install -y libxcb-render-util0 \
-    && apt-get install -y libxcb-shape0 \
-    && apt-get install '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev -y \
-    && apt-get install python3-pyqt5 -y
+RUN /usr/local/bin/python -m pip install --upgrade pip
+
+# Install Python dependencies
+RUN pip install pandas opencv-python-headless pyyaml asciitree==0.3.3 entrypoints==0.4 fasteners==0.18 imageio==2.25.0 lxml==4.9.2 networkx==3.0 numcodecs==0.11.0 numpy==1.24.1 opencv-python==4.7.0.68 packaging==23.0 Pillow==9.4.0 PyOpenGL==3.1.6 pyqtgraph==0.13.1 PySide6==6.4.2 PySide6-Addons==6.4.2 PySide6-Essentials==6.4.2 PyWavelets==1.4.1 scikit-image==0.19.3 scipy==1.10.0 shiboken6==6.4.2 tifffile==2023.1.23.1 trimesh==3.18.1 zarr==2.13.6
+
+# Install dependencies
+RUN apt-get update && apt-get install -y libxcb-xv0 libxkbcommon-x11-dev libxcb-xtest0-dev libxcb-randr0-dev libxcb-xinerama0-dev libxcb-shape0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-render-util0-dev libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev x11-utils apt-get install x11-xserver-utils libdbus-1-3
+
+#RUN export DISPLAY=host.docker.internal:0 \
+#    && xhost + 127.0.0.1 \
+#    && python pyReconstruct/src/PyReconstruct.py
+
+# Start Xvfb and run pyReconstruct
+CMD ["sh", "-c", "Xvfb :99 -screen 0 1024x768x16 -nolisten tcp &> xvfb.log & DISPLAY=:99 python3 /app/pyReconstruct/src/PyReconstruct.py"]
