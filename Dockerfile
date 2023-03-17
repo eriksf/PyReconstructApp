@@ -7,9 +7,6 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y git libxcb-xinerama0 libxcb-xinerama0-dev libxkbcommon-x11-0 xvfb
 
-# Set timezone to UTC
-#ENV TZ=UTC
-
 # Clone the pyReconstruct repository
 RUN git clone https://github.com/SynapseWeb/pyReconstruct.git
 

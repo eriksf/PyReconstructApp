@@ -177,18 +177,9 @@ TAP_LOCKFILE=${HOME}/.tap/${SLURM_JOB_ID}.lock
 sleep 1
 DISPLAY=:0 xterm -fg white -bg red3 +sb -geometry 55x2+0+0 -T 'END SESSION HERE' -e "echo 'TACC: Press <enter> in this window to end your session' && read && rm ${TAP_LOCKFILE}" &
 sleep 1
-#DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'docker run -e DISPLAY=:0 docker://tiffhuff/pyreconstruct:0.0.1' &
-
-##DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'docker run -e DISPLAY=host.docker.internal:0 tiffhuff/pyreconstruct:0.0.1 python pyReconstruct/src/PyReconstruct.py' &
-
-# Export display and execute code
-#RUN export DISPLAY=host.docker.internal:0 \
-#    && xhost + 127.0.0.1 \
-#    && python pyReconstruct/src/PyReconstruct.py
 
 DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://tiffhuff/pyreconstruct:0.0.1 python /app/pyReconstruct/src/PyReconstruct.py' &
-# sleep 30
-#DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'python src/PyReconstruct.py' &
+
 sleep 1
 
 echo $(date) > ${TAP_LOCKFILE}
