@@ -24,4 +24,3 @@ jobs:
         file: Dockerfile
         push: true
         tags: tiffhuff/pyreconstruct:latest
-
