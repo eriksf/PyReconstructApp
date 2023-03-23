@@ -70,3 +70,10 @@ RUN pip install \
 
 # Command for execution
 CMD ["python", "pyReconstruct/src/PyReconstruct.py"]
+
+# To run this container using Docker on Mac, open a terminal and pass the
+# command: 'xhost + 127.0.0.1' then execute the command: 
+# 'docker run -e DISPLAY=host.docker.internal:0 tiffhuff/pyreconstruct:0.0.1 python pyReconstruct/src/PyReconstruct.py'
+#
+# To run this container using Apptainer/Singularity:
+# 'apptainer exec docker://tiffhuff/pyreconstruct:0.0.1 python /app/pyReconstruct/src/PyReconstruct.py'
