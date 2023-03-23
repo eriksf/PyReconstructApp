@@ -50,7 +50,6 @@ fi
 XSTARTUP="/tmp/dcv-startup-$USER"
 cat <<- EOF > $XSTARTUP
 #!/bin/sh
-
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
 . /etc/X11/xinit/xinitrc-common
@@ -76,9 +75,9 @@ if [ -f /tmp/.X11-unix/X0 ]; then
 fi
 
 # create DCV session
-DCV_HANDLE="$USER-session"
-dcv create-session --init=$XSTARTUP $DCV_HANDLE
-if ! `dcv list-sessions | grep -q $USER`; then
+DCV_HANDLE="${AGAVE_JOB_ID}-session"
+dcv create-session --owner ${AGAVE_JOB_OWNER} --init=$XSTARTUP $DCV_HANDLE
+if ! `dcv list-sessions | grep -q ${AGAVE_JOB_ID}`; then
     echo "TACC:"
     echo "TACC: ERROR - could not find a DCV session for $USER"
     echo "TACC: ERROR - This could be because all DCV licenses are in use."
@@ -96,6 +95,9 @@ echo "TACC: local (compute node) DCV port is $LOCAL_VNC_PORT"
 
 LOGIN_PORT=$(tap_get_port)
 echo "TACC: got login node DCV port $LOGIN_PORT"
+
+# Wait a few seconds for good measure for the job status to update
+sleep 3;
 
 # create reverse tunnel port to login nodes.  Make one tunnel for each login so the user can just
 # connect to ls6.tacc
@@ -151,8 +153,6 @@ fi
 # silence xalt errors
 module unload xalt
 
-# Updating PyReconstruct and installing dependencies
-
 # run an xterm for the user; execution will hold here
 mkdir -p $HOME/.tap
 TAP_LOCKFILE=${HOME}/.tap/${SLURM_JOB_ID}.lock
@@ -160,7 +160,7 @@ sleep 1
 DISPLAY=:0 xterm -fg white -bg red3 +sb -geometry 55x2+0+0 -T 'END SESSION HERE' -e "echo 'TACC: Press <enter> in this window to end your session' && read && rm ${TAP_LOCKFILE}" &
 sleep 1
 
-DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'apptainer exec docker://tiffhuff/pyreconstruct:0.0.1 python /app/pyReconstruct/src/PyReconstruct.py' &
+DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://tiffhuff/pyreconstruct:0.0.1 python /app/pyReconstruct/src/PyReconstruct.py' &
 
 sleep 1
 
