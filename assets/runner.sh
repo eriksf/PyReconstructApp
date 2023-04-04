@@ -156,7 +156,7 @@ module unload xalt
 # run an xterm for the user; execution will hold here
 mkdir -p $HOME/.tap
 TAP_LOCKFILE=${HOME}/.tap/${SLURM_JOB_ID}.lock
-sleep 1
+sleep 3
 DISPLAY=:0 xterm -fg white -bg red3 +sb -geometry 55x2+0+0 -T 'END SESSION HERE' -e "echo 'TACC: Press <enter> in this window to end your session' && read && rm ${TAP_LOCKFILE}" &
 sleep 1
 
