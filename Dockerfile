@@ -2,7 +2,7 @@
 FROM python:3.9.16-bullseye
 
 # Add maintainer information
-LABEL maintainer="Tiffany Huff <tiffanynicolehuff@utexas.edu>"
+LABEL maintainer="Tiffany Huff <tiffanynicolehuff@utexas.edu>, Erik Ferlanti <eferlanti@tacc.utexas.edu>"
 
 # Set working directory
 WORKDIR /app
