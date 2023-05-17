@@ -1,75 +1,61 @@
-# Build from base image
-FROM python:3.9.16-bullseye
+FROM condaforge/miniforge3:23.1.0-1
+LABEL maintainer="Tiffany Huff <tiffanynicolehuff@utexas.edu>, Erik Ferlanti <eferlanti@tacc.utexas.edu>"
 
-# Add maintainer information
-LABEL maintainer="Tiffany Huff <tiffanynicolehuff@utexas.edu>"
-
-# Set working directory
 WORKDIR /app
 
+# Configure ENV
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Add docker-clean script
+COPY extras/docker-clean /usr/bin/docker-clean
+RUN chmod a+rx /usr/bin/docker-clean && docker-clean
+
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    libxcb-xinerama0 \
-    libxcb-xinerama0-dev \
-    libxkbcommon-x11-0 \
-    xvfb \
-    libxcb-xv0 \
-    libxkbcommon-x11-dev \
-    libxcb-xtest0-dev \
-    libxcb-randr0-dev \
-    libxcb-xinerama0-dev \
-    libxcb-shape0-dev \
-    libxcb-xkb-dev \
-    libxcb-icccm4-dev \
-    libxcb-image0-dev \
-    libxcb-keysyms1-dev \
-    libxcb-render-util0-dev \
-    libx11-xcb-dev \
-    libglu1-mesa-dev \
-    libxrender-dev \
-    libxi-dev \
-    x11-utils \
-    x11-xserver-utils \
-    libdbus-1-3
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        less \
+        libxcb-xinerama0 \
+        libxcb-xinerama0-dev \
+        libxkbcommon-x11-0 \
+        xvfb \
+        libxcb-xv0 \
+        libxkbcommon-x11-dev \
+        libxcb-xtest0-dev \
+        libxcb-randr0-dev \
+        libxcb-xinerama0-dev \
+        libxcb-shape0-dev \
+        libxcb-xkb-dev \
+        libxcb-icccm4-dev \
+        libxcb-image0-dev \
+        libxcb-keysyms1-dev \
+        libxcb-render-util0-dev \
+        libx11-xcb-dev \
+        libglu1-mesa-dev \
+        libxrender-dev \
+        libxi-dev \
+        x11-utils \
+        x11-xserver-utils \
+        libdbus-1-3 \
+    && docker-clean
 
-# Clone the pyReconstruct repository
-RUN git clone https://github.com/SynapseWeb/pyReconstruct.git
+# Clone the pyReconstruct repository, switch to the autoseg-dev branch, and
+# install the custom conda environment
+ARG ENV_NAME=pr_autoseg
+RUN git clone https://github.com/SynapseWeb/PyReconstruct.git \
+    && cd PyReconstruct \
+    && git checkout autoseg-dev \
+    && git submodule update --init --recursive \
+    && conda env create -f autoseg-environment.yml -n ${ENV_NAME} \
+    && echo "conda activate ${ENV_NAME}" >> /etc/skel/.bashrc \
+    && echo "conda activate ${ENV_NAME}" >> ~/.bashrc \
+    && docker-clean
 
-# Upgrade pip
-RUN /usr/local/bin/python -m pip install --upgrade pip
-
-# Install Python and script dependencies
-RUN pip install \
-    pandas \
-    opencv-python-headless \
-    pyyaml \
-    asciitree==0.3.3 \
-    entrypoints==0.4 \
-    fasteners==0.18 \
-    imageio==2.25.0 \
-    lxml==4.9.2 \
-    networkx==3.0 \
-    numcodecs==0.11.0 \
-    numpy==1.24.1 \
-    opencv-python==4.7.0.68 \
-    packaging==23.0 \
-    Pillow==9.4.0 \
-    PyOpenGL==3.1.6 \
-    pyqtgraph==0.13.1 \
-    PySide6==6.4.2 \
-    PySide6-Addons==6.4.2 \
-    PySide6-Essentials==6.4.2 \
-    PyWavelets==1.4.1 \
-    scikit-image==0.19.3 \
-    scipy==1.10.0 \
-    shiboken6==6.4.2 \
-    tifffile==2023.1.23.1 \
-    trimesh==3.18.1 \
-    zarr==2.13.6
+ENV PATH=/opt/conda/envs/${ENV_NAME}/bin:$PATH
 
 # Command for execution
-CMD ["python", "pyReconstruct/src/PyReconstruct.py"]
+CMD ["python", "/app/PyReconstruct/src/PyReconstruct.py"]
 
 # To run this container using Docker on Mac, open a terminal and pass the
 # command: 'xhost + 127.0.0.1' then execute the command: 
