@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main", "autoseg-env" ]
+    branches: [ "main" ]
     tags: [ "v*" ]
   pull_request:
     branches: [ "main" ]
@@ -26,9 +26,10 @@ jobs:
       - name: Cache Docker layers
         uses: actions/cache@v3
         with:
-          path: /tmp/.buildx-cache-pyreconstruct
-          key: ${{ runner.os }}-buildx-pyreconstruct-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-buildx-pyreconstruct-
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
           
       - name: Docker metadata
         id: meta
@@ -56,10 +57,10 @@ jobs:
           push: ${{ github.ref_type == 'tag' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache-pyreconstruct
-          cache-to: type=local,dest=/tmp/.buildx-cache-pyreconstruct-new
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache-pyreconstruct
-          mv /tmp/.buildx-cache-pyreconstruct-new /tmp/.buildx-cache-pyreconstruct
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
