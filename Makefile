@@ -1,5 +1,10 @@
 APPID ?= eriksf-pyreconstruct-0.0.1
+IMAGE_VERSION ?= 0.0.1
 ts := $(shell /bin/date "+%Y-%m-%d-%H%M%S")
+
+build:
+	./extras/grab-environment.sh
+	docker build -t eriksf/pyreconstruct:${IMAGE_VERSION} .
 
 list:
 	tapis apps search --id start eriksf

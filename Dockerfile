@@ -40,22 +40,21 @@ RUN apt-get update \
         libdbus-1-3 \
     && docker-clean
 
-# Clone the pyReconstruct repository, switch to the autoseg-dev branch, and
+# Copy in the conda environment yaml file
+COPY autoseg-environment.yml /tmp/autoseg-environment.yml
+
 # install the custom conda environment
 ARG ENV_NAME=pr_autoseg
-RUN git clone https://github.com/SynapseWeb/PyReconstruct.git \
-    && cd PyReconstruct \
-    && git checkout autoseg-dev \
-    && git submodule update --init --recursive \
-    && conda env create -f autoseg-environment.yml -n ${ENV_NAME} \
+RUN conda env create -f /tmp/autoseg-environment.yml -n ${ENV_NAME} \
     && echo "conda activate ${ENV_NAME}" >> /etc/skel/.bashrc \
     && echo "conda activate ${ENV_NAME}" >> ~/.bashrc \
+    && rm -f /tmp/autoseg-environment.yml \
     && docker-clean
 
 ENV PATH=/opt/conda/envs/${ENV_NAME}/bin:$PATH
 
 # Command for execution
-CMD ["python", "/app/PyReconstruct/src/PyReconstruct.py"]
+#CMD ["python", "/app/PyReconstruct/src/PyReconstruct.py"]
 
 # To run this container using Docker on Mac, open a terminal and pass the
 # command: 'xhost + 127.0.0.1' then execute the command: 
