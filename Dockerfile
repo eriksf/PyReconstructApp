@@ -40,8 +40,10 @@ RUN apt-get update \
         libdbus-1-3 \
     && docker-clean
 
-# Copy in the conda environment yaml file
-COPY autoseg-environment.yml /tmp/autoseg-environment.yml
+# ADD in the conda environment yaml file
+# NOTE: don't typically use ADD vs RUN wget/curl but
+# doing it for proper cache invalidation
+ADD https://raw.githubusercontent.com/SynapseWeb/PyReconstruct/autoseg-dev/autoseg-environment.yml /tmp/autoseg-environment.yml
 
 # install the custom conda environment
 ARG ENV_NAME=pr_autoseg
