@@ -160,7 +160,8 @@ sleep 3
 DISPLAY=:0 xterm -fg white -bg red3 +sb -geometry 55x2+0+0 -T 'END SESSION HERE' -e "echo 'TACC: Press <enter> in this window to end your session' && read && rm ${TAP_LOCKFILE}" &
 sleep 1
 
-DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://eriksf/pyreconstruct:0.0.1 python /app/PyReconstruct/src/PyReconstruct.py' &
+#DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec docker://eriksf/pyreconstruct:0.0.1 python /app/PyReconstruct/src/PyReconstruct.py' &
+DISPLAY=:0 xterm -ls -geometry 80x24+100+50 -e 'singularity exec --nv docker://eriksf/pyreconstruct:latest python /work/03762/eriksf/public/code/PyReconstruct/src/PyReconstruct.py' &
 
 sleep 1
 
